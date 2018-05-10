@@ -1,0 +1,21 @@
+
+--expdp.odsgg.par
+USERID='/ as sysdba'
+SCHEMAS=ODSGG
+DUMPFILE=expdb.odsggct.dmp
+LOGFILE=expdb.odsggct.log
+DIRECTORY=DATA_PUMP_DIR_GG
+content=metadata_only
+CLUSTER=N
+INCLUDE=TABLE:"LIKE '%!_CT' ESCAPE '!'"
+
+--expdp.gg.par
+USERID='/ as sysdba'
+FLASHBACK_SCN=772320987046
+SCHEMAS=CUSTOMER
+parallel=16
+DUMPFILE=expdb.customer_%U.dmp
+LOGFILE=expdb.customer.log
+INCLUDE=TABLE:"IN (SELECT t_name FROM BAKIS.GGTABLE4EXP where t_owner='CUSTOMER')"
+DIRECTORY=DATA_PUMP_DIR_GG
+CLUSTER=N
