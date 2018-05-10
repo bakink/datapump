@@ -1,0 +1,13 @@
+USERID='/ as sysdba'
+parallel=16
+DUMPFILE=expdb.odsgg_%U.dmp
+LOGFILE=impdb.odsgg.log
+DIRECTORY=DATA_PUMP_DIR_GG
+transform=segment_attributes:n
+transform=disable_archive_logging:y
+logtime=all 
+metrics=y
+#EXCLUDE=INDEX,GRANT,CONSTRAINT,REF_CONSTRAINT
+#EXCLUDE=TRIGGER,INDEX,GRANT,CONSTRAINT,REF_CONSTRAINT
+EXCLUDE=INDEX,CONSTRAINT
+CLUSTER=N
