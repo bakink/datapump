@@ -6,6 +6,9 @@ select 'nohup expdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdb.Y_'
 ||'query=''WHERE to_char(create_date,''''YYYYMMDD'''')='''''||create_date||''''''' "'||' &'
 from cte 
 
---expdp with partition table
-select 'nohup expdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.'||partition_name||'.dmp LOGFILE=expdp.'||lower(table_name)||'.'||partition_name||'.log TABLES='||table_owner||'.'||table_name||':'||partition_name||' DIRECTORY=DUMP_DIR2 CLUSTER=N" &' 
-from dba_tab_partitions where table_owner='X' and table_name='X' order by partition_name
+query='CUSTOMER.ALZ_HLTH_MDLR_LOG:"WHERE ((application_name = ''CREATE_PROPOSAL'' and ref_2 = ''ONAYAGONDER'')
+             or application_name = ''KOC_HLTH_WEB_EXT_REN_EDI_ROUTE''
+             or application_name = ''KOC_HLTH_EXT_REN_EDI_ROUTE''
+             or application_name = ''KOC_HLTH_WEB_INT_REN_ROUTE''
+             or application_name = ''BEFORE_POL_RESTORE''
+             or application_name = ''POL_RESTORE'')"'
