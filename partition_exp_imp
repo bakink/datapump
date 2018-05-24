@@ -1,7 +1,13 @@
---Query from partition exp/imp
+--Query from partition expdp/impdp
 
+--expdp
 select 'nohup expdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.'||partition_name||'.dmp LOGFILE=expdp.'||lower(table_name)||'.'||partition_name||'.log TABLES='||table_owner||'.'||table_name||':'||partition_name||' DIRECTORY=DUMP_DIR2 CLUSTER=N" &' 
 from dba_tab_partitions where table_owner='CUSTOMER' and table_name='ALZ_DOC_RECOVERY' order by partition_name
 
+--impdp
 select 'impdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.'||partition_name||'.dmp LOGFILE=impdp.'||lower(table_name)||'.'||partition_name||'.log DIRECTORY=DUMP_DIR2 CLUSTER=N" ' 
 from dba_tab_partitions where table_owner='CUSTOMER' and table_name='ALZ_DOC_RECOVERY' order by partition_name
+
+--impdp with remap table
+select 'impdp "USERID=''/ as sysdba'' remap_table=ALZ_HLTH_MDLR_LOG:ALZ_HLTH_MDLR_LOG_'||partition_name||' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.'||partition_name||'_DEL.dmp LOGFILE=impdp.'||lower(table_name)||'.'||partition_name||'_DEL.log DIRECTORY=DUMP_DIR2 CLUSTER=N" ' 
+from dba_tab_partitions where table_owner='CUSTOMER' and table_name='ALZ_HLTH_MDLR_LOG' order by partition_name
