@@ -1,0 +1,3 @@
+
+select * from dba_datapump_jobs
+impdp "userid='/ as sysdba' attach=SYS_IMPORT_FULL_03"
