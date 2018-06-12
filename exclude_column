@@ -1,0 +1,52 @@
+--How to exclude column data from Oracle Data Pump export
+
+--http://www.qite.nl/2014/05/how-to-exclude-columns-from-oracle-data-pump-export/
+--http://dbaharrison.blogspot.com/2014/08/removing-blob-data-with-expdp.html
+--https://docs.oracle.com/cd/B28359_01/server.111/b28319/et_dp_driver.htm#i1007502
+--https://dataworks-inc.com/import-a-subset-of-table-columns-using-oracle-data-pump/
+
+CREATE OR REPLACE PACKAGE ano_remove_data AUTHID CURRENT_USER
+AS
+  FUNCTION ano_empty_lob(old_blob IN BLOB) RETURN BLOB;
+  FUNCTION ano_empty_lob(old_clob IN CLOB) RETURN CLOB;
+
+  FUNCTION ano_empty_field(old_varchar IN VARCHAR2) RETURN VARCHAR2;
+
+END ano_remove_data;
+/
+
+CREATE OR REPLACE PACKAGE BODY ano_remove_data AS
+ 
+FUNCTION ano_empty_lob(old_blob IN BLOB) RETURN BLOB
+IS
+BEGIN
+   RETURN EMPTY_BLOB();
+END;
+
+FUNCTION ano_empty_lob(old_clob IN CLOB) RETURN CLOB
+IS
+BEGIN
+   RETURN EMPTY_CLOB();
+END;
+
+FUNCTION ano_empty_field(old_varchar IN VARCHAR2) RETURN VARCHAR2
+IS
+BEGIN
+   RETURN '';
+END;
+
+END ano_remove_data;
+/
+
+--parfile
+USERID='/ as sysdba'
+SCHEMAS=CUSTOMER
+content=data_only
+#parallel=8
+#DUMPFILE=expdb.logs_%U.dmp
+DUMPFILE=expdb.logs.dmp
+LOGFILE=expdb.logs.log
+INCLUDE=TABLE:"='AEN_LOGS_20180607'"
+DIRECTORY=DUMP_DIR2
+CLUSTER=N
+remap_data=CUSTOMER.AEN_LOGS_20180607.STACK_TRACE:ano_remove_data.ano_empty_lob
