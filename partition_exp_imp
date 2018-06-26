@@ -13,6 +13,7 @@ select 'impdp "USERID=''/ as sysdba'' remap_table=ALZ_HLTH_MDLR_LOG:ALZ_HLTH_MDL
 from dba_tab_partitions where table_owner='CUSTOMER' and table_name='ALZ_HLTH_MDLR_LOG' order by partition_name
 
 select  'nohup expdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.dmp LOGFILE=expdp.'||lower(table_name)||'.log TABLES='||owner||'.'||table_name||' DIRECTORY=DUMP_DIR2 CLUSTER=N" &' 
+||chr(13)||'sleep 2'
 from dba_tables where owner='CUSTOMER' and table_name in (
 'ALZ_HLTH_FILENET_JMS_LOG'
 ,'ONEAPP_LOGS'
@@ -29,3 +30,4 @@ from dba_tables where owner='CUSTOMER' and table_name in (
 ,'GWS_THIRDPARTY_SERVICES_REQ'
 )
 order by table_name
+
