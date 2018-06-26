@@ -11,3 +11,21 @@ from dba_tab_partitions where table_owner='CUSTOMER' and table_name='ALZ_DOC_REC
 --impdp with remap table
 select 'impdp "USERID=''/ as sysdba'' remap_table=ALZ_HLTH_MDLR_LOG:ALZ_HLTH_MDLR_LOG_'||partition_name||' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.'||partition_name||'_DEL.dmp LOGFILE=impdp.'||lower(table_name)||'.'||partition_name||'_DEL.log DIRECTORY=DUMP_DIR2 CLUSTER=N" ' 
 from dba_tab_partitions where table_owner='CUSTOMER' and table_name='ALZ_HLTH_MDLR_LOG' order by partition_name
+
+select  'nohup expdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.dmp LOGFILE=expdp.'||lower(table_name)||'.log TABLES='||owner||'.'||table_name||' DIRECTORY=DUMP_DIR2 CLUSTER=N" &' 
+from dba_tables where owner='CUSTOMER' and table_name in (
+'ALZ_HLTH_FILENET_JMS_LOG'
+,'ONEAPP_LOGS'
+,'KOC_WS_POLICY_LOG'
+,'ALZ_SAGMER_CLAIM_WS_LOG'
+,'ALZ_KASKO_WS_LOG'
+,'ALZ_ERROR_LOG_TABLE'
+,'CP_LOGS'
+,'ALZ_AUTHORIZATION_DIMS_LOG'
+,'ALZ_TOBB_LOG'
+,'ALZ_ACC_ONLINE_COLLECT_LOG'
+,'ALZ_GHLTH_CRE_PROPOSAL_LOG'
+,'ALZ_HATMER_WS_LOG'
+,'GWS_THIRDPARTY_SERVICES_REQ'
+)
+order by table_name
