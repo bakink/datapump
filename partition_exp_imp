@@ -43,3 +43,15 @@ select a.table_owner,a.table_name, a.partition_name, a.high_value,a.partition_po
  a.table_name=b.table_name
 ) 
 where partition_position=lastpart_position-1
+
+------imp pump last month
+select 'nohup impdp "USERID=''/ as sysdba'' CONTENT=DATA_ONLY DUMPFILE=expdp.'||lower(table_name)||'.'||partition_name||'.dmp LOGFILE=impdp.'||lower(table_name)||'.'||partition_name||'.log DIRECTORY=DUMP_DIR2 CLUSTER=N" &'
+||chr(13)||'sleep 5' 
+from (      
+select a.table_owner,a.table_name, a.partition_name, a.high_value,a.partition_position,
+ MAX(a.partition_position) KEEP ( DENSE_RANK LAST ORDER BY a.partition_position) OVER ( PARTITION BY a.table_owner,a.table_name) AS lastpart_position 
+ from dba_tab_partitions a,alzadmin.archived_tab_params b where 
+ a.table_owner=b.owner and 
+ a.table_name=b.table_name
+) 
+where partition_position=lastpart_position-1
