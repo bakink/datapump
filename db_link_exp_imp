@@ -1,0 +1,6 @@
+
+--https://askdba.org/weblog/2009/01/recreating-database-link/
+
+--select * from DATABASE_EXPORT_OBJECTS where object_path like '%LINK%';
+expdp "userid='/ as sysdba' full=y include=DB_LINK dumpfile=DB_LINK.dmp directory=DUMP_DIR"
+impdp "userid='/ as sysdba' full=y include=DB_LINK dumpfile=DB_LINK.dmp directory=DUMP_DIR"
