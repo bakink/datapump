@@ -1,0 +1,14 @@
+USERID=test/test123
+parallel=16
+#DUMPFILE=expdb.table_%U.dmp
+LOGFILE=impdb.table.log
+DIRECTORY=CNV_DIR
+CLUSTER=N
+network_link=YTS_IMPORT_BAKI 
+SCHEMAS=DCS_YKB_LIVE
+remap_schema=DCS_YKB_LIVE:CNV
+include=TABLE:"IN (select object_name from imp_table_list)"
+transform=segment_attributes:n
+transform=disable_archive_logging:y
+logtime=all 
+metrics=y
